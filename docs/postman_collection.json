@@ -1,0 +1,219 @@
+{
+  "info": {
+    "name": "Restaurant Management System API",
+    "description": "Postman collection for auth, search, orders, cart, and admin endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://rms.test" },
+    { "key": "order_id", "value": "1" },
+    { "key": "restaurant_id", "value": "1" },
+    { "key": "menu_item_id", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer.brenda@pheibel.com\",\n  \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login.php",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login.php"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Global Search",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/search.php?q=fish&include_orders=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "search.php"],
+              "query": [
+                { "key": "q", "value": "fish" },
+                { "key": "include_orders", "value": "true" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurant_id\": {{restaurant_id}},\n  \"delivery_address\": \"Buea Campus Gate\",\n  \"payment_method\": \"mobile_money\",\n  \"items\": [\n    {\n      \"menu_item_id\": {{menu_item_id}},\n      \"quantity\": 2,\n      \"special_instructions\": \"No pepper\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/create.php",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders", "create.php"]
+            }
+          }
+        },
+        {
+          "name": "List Orders",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/orders/list.php?page=1&limit=20&include_items=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders", "list.php"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "include_items", "value": "true" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Order",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/orders/get.php?order_id={{order_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders", "get.php"],
+              "query": [
+                { "key": "order_id", "value": "{{order_id}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Order Items",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/orders/items.php?order_id={{order_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders", "items.php"],
+              "query": [
+                { "key": "order_id", "value": "{{order_id}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Orders",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/orders/search.php?q=ORD&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders", "search.php"],
+              "query": [
+                { "key": "q", "value": "ORD" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Pending Orders",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/orders/get_pending.php?restaurant_id={{restaurant_id}}&limit=25",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders", "get_pending.php"],
+              "query": [
+                { "key": "restaurant_id", "value": "{{restaurant_id}}" },
+                { "key": "limit", "value": "25" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": {{order_id}},\n  \"status\": \"confirmed\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/orders/update_status.php",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders", "update_status.php"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Add to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"item_id\": {{menu_item_id}},\n  \"quantity\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cart/add.php",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "add.php"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Toggle Restaurant",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurant_id\": {{restaurant_id}},\n  \"action\": \"activate\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/toggle_restaurant.php",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "toggle_restaurant.php"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

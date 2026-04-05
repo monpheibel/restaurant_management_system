@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Customer Account</title>
+    <meta name="app-base-url" content="http://rms.test:8080/">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        :root{--bg:#f6efe2;--surface:#fff8eb;--primary:#3f6a3f;--primary-dark:#2e4f2e;--text:#2f3a2f;--muted:#6c705f;--border:#dccfb8;}
+        body{margin:0;background:linear-gradient(rgba(32,39,28,.55), rgba(32,39,28,.55)), url('assets/images/achu.jpeg') center/cover fixed no-repeat;font-family:'Segoe UI',Arial,sans-serif;}
+        .register-wrapper{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;}
+        .register-box{width:100%;max-width:470px;background:var(--surface);border-radius:12px;box-shadow:0 12px 30px rgba(69,61,52,.18);padding:2rem;}
+        .register-box h1{margin:0 0 .55rem;font-size:1.8rem;color:var(--primary);}
+        .register-box p{margin:0 0 1rem;color:var(--muted);line-height:1.5;}
+        .form-group{margin-bottom:1rem;}
+        label{display:block;margin-bottom:.35rem;color:var(--muted);font-weight:600;}
+        input{width:100%;padding:.75rem 10px;border:1px solid var(--border);border-radius:8px;}
+        button{width:100%;padding:.85rem;font-size:1rem;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;font-weight:700;}
+        button:hover{background:var(--primary-dark);}
+        .link-group{margin-top:.9rem;text-align:center;}
+        a{color:var(--primary);text-decoration:none;font-weight:600;}
+        .help-text{margin-top:-.35rem;margin-bottom:1rem;font-size:.9rem;color:var(--muted);}
+        .helper-note{margin:.85rem 0 0;color:var(--muted);font-size:.92rem;line-height:1.5;}
+    </style>
+</head>
+<body>
+    <div class="register-wrapper">
+        <div class="register-box">
+            <h1>Create Customer Account</h1>
+            <p>Register as a customer to browse restaurants, place orders, and track your receipts.</p>
+            <form id="registerForm" action="register_process.php" method="POST" autocomplete="off">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" name="name" id="name" placeholder="Your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" name="phone" id="phone" placeholder="+2376...">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="At least 8 characters" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" placeholder="Repeat your password" required>
+                </div>
+                <div class="help-text">Customer registration only. Vendor and admin accounts are created by the platform team.</div>
+                <button type="submit" name="submit_register">Create Account</button>
+            </form>
+            <p class="helper-note" id="helperNote" hidden>Opening the full PHP registration page on the application host for a same-origin registration flow.</p>
+            <div class="link-group"><a href="login.html">Already have an account? Sign in</a></div>
+        </div>
+    </div>
+    <script>
+        (function() {
+            const form = document.getElementById('registerForm');
+            const configuredBaseUrl = document.querySelector('meta[name="app-base-url"]')?.content?.trim();
+            const helperNote = document.getElementById('helperNote');
+
+            if (!form || !configuredBaseUrl) {
+                return;
+            }
+
+            if (window.location.port === '5500' || window.location.protocol === 'file:') {
+                const normalizedBaseUrl = configuredBaseUrl.endsWith('/')
+                    ? configuredBaseUrl
+                    : `${configuredBaseUrl}/`;
+                if (helperNote) {
+                    helperNote.hidden = false;
+                }
+                window.location.replace(new URL('register.php', normalizedBaseUrl).toString());
+            }
+        })();
+    </script>
+</body>
+</html>
