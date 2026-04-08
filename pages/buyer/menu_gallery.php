@@ -15,18 +15,12 @@ $userId = (int) ($_SESSION['user_id'] ?? 0);
 $userName = $_SESSION['name'] ?? 'Customer';
 
 $imagePool = [
-    '../../assets/images/achu.jpeg',
-    '../../assets/images/ndole.jpeg',
-    '../../assets/images/ekwang.jpeg',
-    '../../assets/images/garri and eru.jpeg',
-    '../../assets/images/okra fish.jpeg',
-    '../../assets/images/koki.jpeg',
-    '../../assets/images/pepper soup fish.jpeg',
-    '../../assets/images/potatoes hot pot.jpeg',
-    '../../assets/images/poulet deje.jpeg',
-    '../../assets/images/sese plantains.jpeg',
-    '../../assets/images/water fufu and eru.jpeg',
-    '../../assets/images/fufu and kati kati.jpeg',
+    '../../images/achu.jpeg',
+    '../../images/ndole.jpeg',
+    '../../images/ekwang.jpeg',
+    '../../images/garri and eru.jpeg',
+    '../../images/okra fish.jpeg',
+    '../../images/koki.jpeg',
 ];
 
 $menuByRestaurant = [];
@@ -53,6 +47,7 @@ try {
         WHERE r.is_active = 1
           AND mi.is_available = 1
         ORDER BY r.name ASC, mi.name ASC
+        LIMIT 8
     ");
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
@@ -67,12 +62,15 @@ try {
             ];
         }
 
+        $image = pickGalleryImage($imagePool, (int) $row['menu_item_id']);
+        $imageName = ucwords(str_replace(['_', '-', '.jpeg', '.jpg', '.png'], [' ', ' ', '', '', ''], basename($image)));
+
         $menuByRestaurant[$restaurantId]['items'][] = [
             'id' => (int) $row['menu_item_id'],
-            'name' => $row['item_name'],
+            'name' => $imageName,
             'description' => $row['item_description'] ?: 'Freshly prepared and ready for order.',
             'display_price' => 1000,
-            'image' => pickGalleryImage($imagePool, (int) $row['menu_item_id']),
+            'image' => $image,
         ];
     }
 
@@ -208,7 +206,7 @@ if (isset($_GET['success']) && $_GET['success'] === 'order_created' && isset($_G
     <style>
         :root { --bg:#f6efe2; --surface:#fff8eb; --surface-strong:#fffdf7; --primary:#355c3d; --primary-dark:#27452d; --accent:#c97d2f; --text:#2f3a2f; --muted:#6c705f; --border:#dccfb8; --success:#e0efd8; --success-text:#2d5a2d; --error:#f4ddd5; --error-text:#8d3c2b; }
         * { box-sizing:border-box; }
-        body { margin:0; font-family:'Segoe UI', Arial, sans-serif; color:var(--text); background:linear-gradient(rgba(246,239,226,.92), rgba(246,239,226,.96)), url('../../assets/images/cameroon dishes.jpeg') center/cover fixed no-repeat; }
+        body { margin:0; font-family:'Segoe UI', Arial, sans-serif; color:var(--text); background:linear-gradient(rgba(246,239,226,.92), rgba(246,239,226,.96)), url('../../images/cameroon dishes.jpeg') center/cover fixed no-repeat; }
         .topbar { background:rgba(53,92,61,.96); color:#fff7ec; padding:1rem 0; position:sticky; top:0; z-index:10; box-shadow:0 8px 20px rgba(27,33,24,.15); }
         .container { width:min(1180px, calc(100% - 2rem)); margin:0 auto; }
         .topbar-flex { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
